@@ -1,5 +1,6 @@
-#Local image files
+#Local files
 data/
+todo.md
 
 #Jupyter files
 */.ipynb_checkpoints/*
