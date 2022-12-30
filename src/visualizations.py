@@ -8,9 +8,6 @@ class ImageVisualizer:
         self.cols = cols
         self.figsize = figsize
 
-
-
-
     def view_random_images(self):
         num_images = self.rows * self.cols
         image_idx = random.sample(range(0, self.dataset.__len__()), num_images)
@@ -21,11 +18,7 @@ class ImageVisualizer:
             result = self.dataset.__getitem__(image)['image']
             f.add_subplot(self.rows, self.cols, i+1)
             plt.axis('off')
-            plt.title(str(result.size()), fontsize = 15)
+            plt.title(str(result.size()), fontsize = 20)
             plt.imshow(result.permute(1,2,0))
 
         plt.tight_layout()
-
-
-    def view_cars():
-        pass
