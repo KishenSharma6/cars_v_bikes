@@ -21,7 +21,7 @@ class Dataset(Dataset):
 
         for i, filename in enumerate(os.listdir(self.directory)):
             images[i] = PIL.Image.open(self.directory + 
-                                              filename,)
+                                              filename,).convert('RGB')
                                               
             if filename.startswith("car"):
                 labels[i] = 1
