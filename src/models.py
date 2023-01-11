@@ -52,5 +52,40 @@ class ConvNet(Module):
         return x
 
     
-    # def train():
-    #     pass
+def train(model, dataloader, criterion, epochs, device, optimizer):
+    epoch_loss = []
+
+    #move model to device
+    model = model.to(device)
+
+    for epoch in range(epochs):
+        running_loss = 0.0
+        
+        for i, data in enumerate(dataloader):
+            #move data to device
+            inputs, labels = data['image'].to(device), data['label'].to(device)
+            inputs, labels = inputs.to(device), labels.to(device)
+
+            #zero gradients in network
+            optimizer.zero_grad()
+
+            #convert input images to scores
+            scores = model(inputs)
+
+            #calculate loss for batch
+            loss = criterion(scores, labels) #do i need to convert raw scores?
+
+            #calculate the gradient of the loss wrt eacj parameter
+            loss.backward()
+
+            #step in direction of the gradient
+            optimizer.step()
+
+            running_loss += loss.item()
+        epoch_loss.append(running_loss / i)
+
+        print("Epoch " + str(epoch + 1) + " loss:" + str(epoch_loss[epoch]))
+    
+    print("training complete")
+    return epoch_loss
+    
