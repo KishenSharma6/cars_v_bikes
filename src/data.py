@@ -1,36 +1,29 @@
 from torch.utils.data import Dataset
 import torchvision.transforms.functional as transform
 
-import PIL
+from PIL import Image
 
 import os
 
 class Dataset(Dataset):
-    def __init__(self, directory, transform = None) -> None:
+    def __init__(self, directory, image_labels, transform = None) -> None:
         super().__init__()
         self.directory= directory
-        self.augmentations = transform
+        self.labels = image_labels
+        self.transform = transform
 
     def __len__(self):
         img_num = os.listdir(self.directory)
         return len(img_num)
 
     def __getitem__(self, idx):
-        images = [0] * self.__len__()
-        labels = [0] * self.__len__()
 
-        for i, filename in enumerate(os.listdir(self.directory)):
-            images[i] = PIL.Image.open(self.directory + 
-                                              filename,).convert('RGB')
-                                              
-            if filename.startswith("car"):
-                labels[i] = 1
-            
-        label = labels[idx]
-        image = images[idx]
+        #https://stackoverflow.com/questions/52473516/split-dataset-based-on-file-names-in-pytorch-dataset
+        image = Image.open(self.directory[idx]).convert("RGB")
+        label = self.labels[idx]
 
-        if self.augmentations:
-            image = self.augmentations(image)
+        if self.transform:
+            image = self.transform(image)
         
         return {
             'image': transform.pil_to_tensor(image),
